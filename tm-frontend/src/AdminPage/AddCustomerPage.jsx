@@ -43,7 +43,8 @@ class AddCustomerPage extends React.Component {
             history.push("/admin");
         }
 
-        // Лабораторная *: обратите внимание на то что пароль не скрыт.
+        // TODO: DONE
+        //  Лабораторная *: обратите внимание на то что пароль не скрыт.
         // <input type="password" name="password" value={this.state.password} onChange={this.handleChange} />
         return (
             <form onSubmit={this.handleSubmit}>
@@ -65,7 +66,7 @@ class AddCustomerPage extends React.Component {
 
                 <FormGroup>
                     <FormLabel>Password</FormLabel>
-                    <FormControl type="text" name="pass" value={this.state.pass} onChange={this.handleChange} />
+                    <FormControl type="password" name="pass" value={this.state.pass} onChange={this.handleChange} />
                 </FormGroup>
 
                 <ButtonToolbar aria-label="Toolbar with button groups">

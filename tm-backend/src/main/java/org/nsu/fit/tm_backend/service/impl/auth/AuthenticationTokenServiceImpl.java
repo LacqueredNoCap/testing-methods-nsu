@@ -6,10 +6,9 @@ import java.util.Set;
 import java.util.UUID;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.jvnet.hk2.annotations.Service;
 import org.nsu.fit.tm_backend.exception.AuthenticationException;
-import org.nsu.fit.tm_backend.repository.Repository;
+import org.nsu.fit.tm_backend.repository.CustomerRepository;
 import org.nsu.fit.tm_backend.repository.data.CustomerPojo;
 import org.nsu.fit.tm_backend.service.AuthenticationTokenService;
 import org.nsu.fit.tm_backend.service.CustomerService;
@@ -27,12 +26,19 @@ import org.nsu.fit.tm_backend.shared.Globals;
 @Service
 @Slf4j
 public class AuthenticationTokenServiceImpl implements AuthenticationTokenService {
-    @Inject
-    private Repository repository;
+
+    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     @Inject
-    private CustomerService customerService;
+    public AuthenticationTokenServiceImpl(
+            CustomerRepository customerRepository,
+            CustomerService customerService) {
+        this.customerRepository = customerRepository;
+        this.customerService = customerService;
+    }
 
+    @Override
     public AccountTokenBO authenticate(String login, String pass) {
         log.info("Credentials: " + login + ":" + pass);
 
@@ -50,19 +56,21 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
             }
 
             accountToken.setId(UUID.randomUUID());
-            accountToken.setAuthorities(Collections.singleton(Authority.CUSTOMER_ROLE));;
+            accountToken.setAuthorities(Collections.singleton(Authority.CUSTOMER_ROLE));
             accountToken.setToken(issueToken(login, accountToken.getAuthorities()));
         }
 
-        return repository.createAccountToken(accountToken);
+        return customerRepository.createAccountToken(accountToken);
     }
 
+    @Override
     public AuthenticationTokenDetails lookupAuthenticationTokenDetails(String authenticationToken) {
-        repository.checkAccountToken(authenticationToken);
+        customerRepository.checkAccountToken(authenticationToken);
 
         return parseToken(authenticationToken);
     }
 
+    @Override
     public AuthenticatedUserDetails lookupAuthenticatedUserDetails(AuthenticationTokenDetails authenticationTokenDetails) {
         if (authenticationTokenDetails.getUserName().equalsIgnoreCase("admin")) {
             if (!authenticationTokenDetails.isAdmin()) {
@@ -75,7 +83,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
             throw new InvalidAuthenticationTokenException("Invalid token...");
         }
 
-        CustomerPojo customerPojo = repository.getCustomerByLogin(authenticationTokenDetails.getUserName());
+        CustomerPojo customerPojo = customerRepository.getCustomerByLogin(authenticationTokenDetails.getUserName());
 
         return new AuthenticatedUserDetails(customerPojo.id.toString(), authenticationTokenDetails.getUserName(), authenticationTokenDetails.getAuthorities());
     }
@@ -83,6 +91,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
     /**
      * Issue a token for a user with the given authorities.
      */
+    @Override
     public String issueToken(String username, Set<String> authorities) {
         String id = generateTokenIdentifier();
         ZonedDateTime issuedDate = ZonedDateTime.now();
@@ -103,6 +112,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
     /**
      * Parse and validate the token.
      */
+    @Override
     public AuthenticationTokenDetails parseToken(String token) {
         return new AuthenticationTokenParser().parseToken(token);
     }
@@ -110,6 +120,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
     /**
      * Refresh a token.
      */
+    @Override
     public String refreshToken(AuthenticationTokenDetails currentTokenDetails) {
         if (!currentTokenDetails.isEligibleForRefreshment()) {
             throw new AuthenticationTokenRefreshmentException("This token cannot be refreshed");

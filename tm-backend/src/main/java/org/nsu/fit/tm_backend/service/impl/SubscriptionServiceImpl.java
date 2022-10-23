@@ -5,16 +5,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.jvnet.hk2.annotations.Service;
-import org.nsu.fit.tm_backend.repository.Repository;
+import org.nsu.fit.tm_backend.repository.CustomerRepository;
 import org.nsu.fit.tm_backend.repository.data.PlanPojo;
 import org.nsu.fit.tm_backend.repository.data.SubscriptionPojo;
 import org.nsu.fit.tm_backend.service.SubscriptionService;
 
 @Service
+@Singleton
 public class SubscriptionServiceImpl implements SubscriptionService {
     @Inject
-    private Repository repository;
+    private CustomerRepository customerRepository;
 
     /**
      * Метод создает подписку. Ограничения:
@@ -22,25 +25,25 @@ public class SubscriptionServiceImpl implements SubscriptionService {
      * 2. Стоймость подписки не превышает текущего баланса кастомера и после покупки вычитается из его баласа.
      */
     public SubscriptionPojo createSubscription(SubscriptionPojo subscriptionPojo) {
-        return repository.createSubscription(subscriptionPojo);
+        return customerRepository.createSubscription(subscriptionPojo);
     }
 
     public void deleteSubscription(UUID subscriptionId) {
-        repository.deleteSubscription(subscriptionId);
+        customerRepository.deleteSubscription(subscriptionId);
     }
 
     /**
      * Возвращает список подписок для указанного customer'а.
      */
     public List<SubscriptionPojo> getSubscriptions(UUID customerId) {
-        Map<UUID, PlanPojo> planIdToPlan = repository.getPlans().stream()
+        Map<UUID, PlanPojo> planIdToPlan = customerRepository.getPlans().stream()
                 .collect(Collectors.toMap(plan -> plan.id, plan -> plan));
 
         List<SubscriptionPojo> subscriptions;
         if (customerId == null) {
-            subscriptions = repository.getSubscriptions();
+            subscriptions = customerRepository.getSubscriptions();
         } else {
-            subscriptions = repository.getSubscriptions(customerId);
+            subscriptions = customerRepository.getSubscriptions(customerId);
         }
 
         // Дозаполняем поля, типа planName, planDetails и planFee.

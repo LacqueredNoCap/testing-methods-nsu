@@ -20,6 +20,9 @@ public interface CustomerService {
      */
     CustomerPojo createCustomer(CustomerPojo customer);
 
+    /**
+     * Метод возвращает список customer'ов.
+     */
     Set<CustomerPojo> getCustomers();
 
     Set<UUID> getCustomerIds();

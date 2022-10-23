@@ -11,8 +11,8 @@ import org.nsu.fit.tm_backend.config.AuthorizationFilter;
 import org.nsu.fit.tm_backend.config.CORSFilter;
 import org.nsu.fit.tm_backend.controller.RestController;
 import org.nsu.fit.tm_backend.exception.ServerExceptionMapper;
-import org.nsu.fit.tm_backend.repository.Repository;
-import org.nsu.fit.tm_backend.repository.impl.MemoryRepository;
+import org.nsu.fit.tm_backend.repository.CustomerRepository;
+import org.nsu.fit.tm_backend.repository.impl.InMemoryRepository;
 import org.nsu.fit.tm_backend.service.AuthenticationTokenService;
 import org.nsu.fit.tm_backend.service.CustomerService;
 import org.nsu.fit.tm_backend.service.PlanService;
@@ -36,7 +36,7 @@ public class CustomApplication extends ResourceConfig {
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(MemoryRepository.class).to(Repository.class).in(Singleton.class);
+                bind(InMemoryRepository.class).to(CustomerRepository.class).in(Singleton.class);
 
                 bind(AuthenticationTokenServiceImpl.class).to(AuthenticationTokenService.class);
 

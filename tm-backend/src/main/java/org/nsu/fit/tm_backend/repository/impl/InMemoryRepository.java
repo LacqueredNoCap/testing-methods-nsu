@@ -12,8 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
-import org.nsu.fit.tm_backend.repository.Repository;
+import org.nsu.fit.tm_backend.repository.CustomerRepository;
 import org.nsu.fit.tm_backend.repository.data.CustomerPojo;
 import org.nsu.fit.tm_backend.repository.data.PlanPojo;
 import org.nsu.fit.tm_backend.repository.data.SubscriptionPojo;
@@ -23,7 +22,7 @@ import org.nsu.fit.tm_backend.shared.JsonMapper;
 
 @Singleton
 @Slf4j
-public class MemoryRepository implements Repository {
+public class InMemoryRepository implements CustomerRepository {
     private static final Object generalMutex = new Object();
 
     private final Map<String, AccountTokenBO> accountTokens;
@@ -31,7 +30,7 @@ public class MemoryRepository implements Repository {
     private final Map<UUID, PlanPojo> plans;
     private final Map<UUID, SubscriptionPojo> subscriptions;
 
-    public MemoryRepository() {
+    public InMemoryRepository() {
         this.accountTokens = new LinkedHashMap<>();
         this.customers = new LinkedHashMap<>();
         this.plans = new LinkedHashMap<>();
@@ -121,13 +120,11 @@ public class MemoryRepository implements Repository {
         synchronized (generalMutex) {
             log.debug(String.format("Method 'lookupCustomerByLogin' was called with data '%s'.", customerLogin));
 
-            for (var customer : customers.values()) {
-                if (customer.login.equals(customerLogin)) {
-                    return customer;
-                }
-            }
+            return customers.values().stream()
+                    .filter(customer -> customer.login.equalsIgnoreCase(customerLogin))
+                    .findAny()
+                    .orElse(null);
         }
-        return null;
     }
 
     public PlanPojo createPlan(PlanPojo plan) {

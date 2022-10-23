@@ -3,7 +3,6 @@ package org.nsu.fit.tm_backend.service.impl;
 import java.util.HashSet;
 import java.util.UUID;
 import javax.inject.Inject;
-import lombok.var;
 import org.jvnet.hk2.annotations.Service;
 import org.nsu.fit.tm_backend.service.CustomerService;
 import org.nsu.fit.tm_backend.service.StatisticService;
@@ -13,12 +12,19 @@ import org.nsu.fit.tm_backend.service.data.StatisticPerCustomerBO;
 
 @Service
 public class StatisticServiceImpl implements StatisticService {
-    @Inject
-    private CustomerService customerService;
+
+    private final CustomerService customerService;
+    private final SubscriptionService subscriptionService;
 
     @Inject
-    private SubscriptionService subscriptionService;
+    public StatisticServiceImpl(
+            CustomerService customerService,
+            SubscriptionService subscriptionService) {
+        this.customerService = customerService;
+        this.subscriptionService = subscriptionService;
+    }
 
+    @Override
     public StatisticBO calculate() {
         var customers = new HashSet<StatisticPerCustomerBO>();
 
@@ -46,6 +52,7 @@ public class StatisticServiceImpl implements StatisticService {
             .build();
     }
 
+    @Override
     public StatisticPerCustomerBO calculate(UUID customerId) {
         var customer = customerService.lookupCustomer(customerId);
 

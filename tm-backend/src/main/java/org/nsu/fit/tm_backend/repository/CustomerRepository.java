@@ -8,7 +8,7 @@ import org.nsu.fit.tm_backend.repository.data.PlanPojo;
 import org.nsu.fit.tm_backend.repository.data.SubscriptionPojo;
 import org.nsu.fit.tm_backend.service.data.AccountTokenBO;
 
-public interface Repository {
+public interface CustomerRepository {
     CustomerPojo createCustomer(CustomerPojo customerPojo);
 
     void editCustomer(CustomerPojo customerPojo);
