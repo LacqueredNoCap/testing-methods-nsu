@@ -1,9 +1,12 @@
 package org.nsu.fit.tm_backend.service.impl;
 
+import javax.inject.Inject;
+
+import org.jvnet.hk2.annotations.Service;
+
 import java.util.HashSet;
 import java.util.UUID;
-import javax.inject.Inject;
-import org.jvnet.hk2.annotations.Service;
+
 import org.nsu.fit.tm_backend.service.CustomerService;
 import org.nsu.fit.tm_backend.service.StatisticService;
 import org.nsu.fit.tm_backend.service.SubscriptionService;
@@ -32,17 +35,16 @@ public class StatisticServiceImpl implements StatisticService {
         int overallFee = 0;
         var customerIds = customerService.getCustomerIds();
         for (var customerId : customerIds) {
-            var customer = calculate(customerId);
+            var customerStatistic = this.calculate(customerId);
 
-            if (customer == null) {
+            if (customerStatistic == null) {
                 continue;
             }
 
-            customers.add(customer);
+            overallBalance += customerStatistic.getOverallBalance();
+            overallFee += customerStatistic.getOverallFee();
 
-            overallBalance += customer.getOverallBalance();
-
-            overallFee += customer.getOverallFee();
+            customers.add(customerStatistic);
         }
 
         return StatisticBO.builder()
@@ -60,9 +62,6 @@ public class StatisticServiceImpl implements StatisticService {
             return null;
         }
 
-        var result = new StatisticPerCustomerBO();
-        result.setOverallBalance(customer.balance);
-
         var subscriptions = subscriptionService.getSubscriptions(customerId);
         var subscriptionIds = new HashSet<UUID>();
         int overallFee = 0;
@@ -71,10 +70,10 @@ public class StatisticServiceImpl implements StatisticService {
             overallFee += subscription.planFee;
         }
 
-        result.setOverallFee(overallFee);
-
-        result.setSubscriptionIds(subscriptionIds);
-
-        return result;
+        return StatisticPerCustomerBO.builder()
+                .overallBalance(customer.balance)
+                .overallFee(overallFee)
+                .subscriptionIds(subscriptionIds)
+                .build();
     }
 }

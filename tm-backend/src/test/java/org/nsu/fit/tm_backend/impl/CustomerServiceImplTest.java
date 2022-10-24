@@ -7,13 +7,12 @@ import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.nsu.fit.tm_backend.repository.CustomerRepository;
 import org.nsu.fit.tm_backend.repository.data.ContactPojo;
@@ -23,7 +22,6 @@ import org.nsu.fit.tm_backend.service.impl.auth.data.AuthenticatedUserDetails;
 import org.nsu.fit.tm_backend.shared.Globals;
 
 // Лабораторная 2: покрыть unit тестами класс CustomerServiceImpl на 100%.
-@ExtendWith(MockitoExtension.class)
 class CustomerServiceImplTest {
 
     private CustomerRepository customerRepositoryMock;
@@ -331,7 +329,8 @@ class CustomerServiceImplTest {
                 .thenReturn(customer.login);
 
         Assertions.assertEquals(
-                ContactPojo.class,
+                //ContactPojo.class,
+                CustomerPojo.class,
                 customerService.me(authenticatedUserDetails).getClass()
         );
     }
@@ -345,7 +344,7 @@ class CustomerServiceImplTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {-100, 100})
+    @ValueSource(ints = {-100, 0, 100})
     void topUpBalance_success(int upBalance) {
         CustomerPojo customer = new CustomerPojo();
         customer.id = UUID.randomUUID();
