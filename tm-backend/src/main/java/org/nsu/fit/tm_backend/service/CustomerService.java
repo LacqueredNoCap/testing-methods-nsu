@@ -29,9 +29,9 @@ public interface CustomerService {
 
     CustomerPojo getCustomer(UUID customerId);
 
-    CustomerPojo lookupCustomer(UUID customerId);
+    CustomerPojo lookupCustomerById(UUID customerId);
 
-    CustomerPojo lookupCustomer(String login);
+    CustomerPojo lookupCustomerByLogin(String login);
 
     ContactPojo me(AuthenticatedUserDetails authenticatedUserDetails);
 

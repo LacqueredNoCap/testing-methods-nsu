@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerPojo lookupCustomer(UUID customerId) {
+    public CustomerPojo lookupCustomerById(UUID customerId) {
         return customerRepository.getCustomers().stream()
             .filter(customer -> customer.id.equals(customerId))
             .findAny()
@@ -96,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerPojo lookupCustomer(String login) {
+    public CustomerPojo lookupCustomerByLogin(String login) {
         return customerRepository.getCustomers().stream()
                 .filter(customer -> customer.login.equalsIgnoreCase(login))
                 .findAny()

@@ -23,8 +23,8 @@ import org.nsu.fit.tm_backend.service.data.StatisticPerCustomerBO;
 import org.nsu.fit.tm_backend.service.impl.StatisticServiceImpl;
 
 // Лабораторная 2: покрыть unit тестами класс StatisticServiceImpl на 100%.
-// Чтобы протестировать метод calculate() используйте Mockito.spy(statisticService) и переопределите метод
-// calculate(UUID customerId), чтобы использовать стратегию "разделяй и властвуй".
+// Чтобы протестировать метод calculateOverall() используйте Mockito.spy(statisticService) и переопределите метод
+// calculateOverall(UUID customerId), чтобы использовать стратегию "разделяй и властвуй".
 public class StatisticServiceImplTest {
 
     private StatisticService statisticServiceSpy;
@@ -45,7 +45,7 @@ public class StatisticServiceImplTest {
 
     @Test
     void calculateStatisticPerCustomer_customerNotFound_returnNull() {
-        Mockito.when(customerServiceMock.lookupCustomer(ArgumentMatchers.any(UUID.class)))
+        Mockito.when(customerServiceMock.lookupCustomerById(ArgumentMatchers.any(UUID.class)))
                 .thenReturn(null);
 
         Assertions.assertNull(statisticServiceSpy.calculate(UUID.randomUUID()));
@@ -57,7 +57,7 @@ public class StatisticServiceImplTest {
         customer.id = UUID.randomUUID();
         customer.balance = 100;
 
-        Mockito.when(customerServiceMock.lookupCustomer(ArgumentMatchers.any(UUID.class)))
+        Mockito.when(customerServiceMock.lookupCustomerById(ArgumentMatchers.any(UUID.class)))
                 .thenReturn(customer);
 
         Mockito.when(subscriptionServiceMock.getSubscriptions(ArgumentMatchers.any(UUID.class)))
@@ -92,7 +92,7 @@ public class StatisticServiceImplTest {
                         .build()
         );
 
-        Mockito.when(customerServiceMock.lookupCustomer(ArgumentMatchers.any(UUID.class)))
+        Mockito.when(customerServiceMock.lookupCustomerById(ArgumentMatchers.any(UUID.class)))
                 .thenReturn(customer);
 
         Mockito.when(subscriptionServiceMock.getSubscriptions(ArgumentMatchers.any(UUID.class)))
@@ -126,7 +126,7 @@ public class StatisticServiceImplTest {
 
         Assertions.assertEquals(
                 expected,
-                statisticServiceSpy.calculate()
+                statisticServiceSpy.calculateOverall()
         );
     }
 
@@ -144,8 +144,9 @@ public class StatisticServiceImplTest {
         Mockito.when(customerServiceMock.getCustomerIds())
                 .thenReturn(customerIds);
 
-        Mockito.when(statisticServiceSpy.calculate(ArgumentMatchers.any(UUID.class)))
-                .thenReturn(statistic);
+        Mockito.doReturn(statistic)
+                .when(statisticServiceSpy)
+                .calculate(ArgumentMatchers.any(UUID.class));
 
         StatisticBO expected = StatisticBO.builder()
                 .customers(Set.of(statistic))
@@ -155,7 +156,7 @@ public class StatisticServiceImplTest {
 
         Assertions.assertEquals(
                 expected,
-                statisticServiceSpy.calculate()
+                statisticServiceSpy.calculateOverall()
         );
     }
 }

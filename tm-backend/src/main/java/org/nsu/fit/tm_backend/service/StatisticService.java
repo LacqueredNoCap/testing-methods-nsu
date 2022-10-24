@@ -7,7 +7,7 @@ import org.nsu.fit.tm_backend.service.data.StatisticPerCustomerBO;
 
 @Contract
 public interface StatisticService {
-    StatisticBO calculate();
+    StatisticBO calculateOverall();
 
     StatisticPerCustomerBO calculate(UUID customerId);
 }

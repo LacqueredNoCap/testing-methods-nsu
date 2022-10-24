@@ -49,7 +49,7 @@ public class AuthenticationTokenServiceImpl implements AuthenticationTokenServic
             accountToken.setAuthorities(Collections.singleton(Authority.ADMIN_ROLE));
             accountToken.setToken(issueToken(login, accountToken.getAuthorities()));
         } else {
-            CustomerPojo customerPojo = customerService.lookupCustomer(login);
+            CustomerPojo customerPojo = customerService.lookupCustomerByLogin(login);
 
             if (customerPojo == null) {
                 throw new AuthenticationException(String.format("Customer with login '%s' is not exists.", login));

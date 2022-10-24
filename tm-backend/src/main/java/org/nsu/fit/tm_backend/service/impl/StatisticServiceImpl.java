@@ -28,7 +28,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public StatisticBO calculate() {
+    public StatisticBO calculateOverall() {
         var customers = new HashSet<StatisticPerCustomerBO>();
 
         int overallBalance = 0;
@@ -56,7 +56,7 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public StatisticPerCustomerBO calculate(UUID customerId) {
-        var customer = customerService.lookupCustomer(customerId);
+        var customer = customerService.lookupCustomerById(customerId);
 
         if (customer == null) {
             return null;

@@ -327,7 +327,7 @@ public class RestController {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(Authority.CUSTOMER_ROLE)
     public Response getStatistic(@Context SecurityContext securityContext) {
-        var result = statisticService.calculate();
+        var result = statisticService.calculateOverall();
         return Response.ok().entity(StatisticMapper.INSTANCE.toStatisticResponse(result)).build();
     }
 }

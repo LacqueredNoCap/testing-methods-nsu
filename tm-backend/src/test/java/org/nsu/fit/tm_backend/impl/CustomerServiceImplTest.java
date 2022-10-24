@@ -15,7 +15,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import org.nsu.fit.tm_backend.repository.CustomerRepository;
-import org.nsu.fit.tm_backend.repository.data.ContactPojo;
 import org.nsu.fit.tm_backend.repository.data.CustomerPojo;
 import org.nsu.fit.tm_backend.service.impl.CustomerServiceImpl;
 import org.nsu.fit.tm_backend.service.impl.auth.data.AuthenticatedUserDetails;
@@ -228,7 +227,7 @@ class CustomerServiceImplTest {
 
         Assertions.assertEquals(
                 customer.id,
-                customerService.lookupCustomer(customer.id).getId()
+                customerService.lookupCustomerById(customer.id).getId()
         );
     }
 
@@ -237,7 +236,7 @@ class CustomerServiceImplTest {
         Mockito.when(customerRepositoryMock.getCustomers())
                 .thenReturn(Collections.emptySet());
 
-        Assertions.assertNull(customerService.lookupCustomer(UUID.randomUUID()));
+        Assertions.assertNull(customerService.lookupCustomerById(UUID.randomUUID()));
     }
 
     @Test
@@ -254,7 +253,7 @@ class CustomerServiceImplTest {
 
         Assertions.assertEquals(
                 customer.login,
-                customerService.lookupCustomer(customer.login).getLogin()
+                customerService.lookupCustomerByLogin(customer.login).getLogin()
         );
     }
 
@@ -263,7 +262,7 @@ class CustomerServiceImplTest {
         Mockito.when(customerRepositoryMock.getCustomers())
                 .thenReturn(Collections.emptySet());
 
-        Assertions.assertNull(customerService.lookupCustomer(""));
+        Assertions.assertNull(customerService.lookupCustomerByLogin(""));
     }
 
     @Test
