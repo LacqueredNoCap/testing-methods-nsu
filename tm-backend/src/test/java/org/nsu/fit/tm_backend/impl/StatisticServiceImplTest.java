@@ -139,7 +139,8 @@ public class StatisticServiceImplTest {
                 .subscriptionIds(Collections.emptySet())
                 .build();
 
-        Set<UUID> customerIds = Set.of(UUID.randomUUID(), UUID.randomUUID());
+        UUID id = UUID.randomUUID();
+        Set<UUID> customerIds = Set.of(UUID.randomUUID(), UUID.randomUUID(), id);
 
         Mockito.when(customerServiceMock.getCustomerIds())
                 .thenReturn(customerIds);
@@ -147,6 +148,10 @@ public class StatisticServiceImplTest {
         Mockito.doReturn(statistic)
                 .when(statisticServiceSpy)
                 .calculate(ArgumentMatchers.any(UUID.class));
+
+        Mockito.doReturn(null)
+                .when(statisticServiceSpy)
+                .calculate(id);
 
         StatisticBO expected = StatisticBO.builder()
                 .customers(Set.of(statistic))
