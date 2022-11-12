@@ -23,4 +23,19 @@ public class ContactPojo {
 
     @JsonProperty("balance")
     public int balance;
+
+    public ContactPojo() {
+    }
+
+    public ContactPojo(String firstName,
+                       String lastName,
+                       String login,
+                       String pass,
+                       int balance) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.login = login;
+        this.pass = pass;
+        this.balance = balance;
+    }
 }

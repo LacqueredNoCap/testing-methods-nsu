@@ -10,4 +10,12 @@ public class CredentialsPojo {
 
     @JsonProperty("pass")
     public String pass;
+
+    public CredentialsPojo() {
+    }
+
+    public CredentialsPojo(String login, String pass) {
+        this.login = login;
+        this.pass = pass;
+    }
 }

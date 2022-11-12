@@ -1,25 +1,30 @@
 package org.nsu.fit.tests.api;
 
+import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+
+import org.testng.annotations.Test;
+
 import org.nsu.fit.services.rest.RestClient;
 import org.nsu.fit.services.rest.data.AccountTokenPojo;
 import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.testng.annotations.Test;
 
 public class AuthTest {
     private AccountTokenPojo adminToken;
 
     // Лабораторная 3: Разобраться с аннотациями, как они влияют на итоговый отчет.
-    @Test(description = "Authenticate as admin.")
+    @Test
+    @Description("Authenticate as admin.")
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Authentication feature.")
     public void authAsAdminTest() {
         adminToken = new RestClient().authenticate("admin", "setup");
     }
 
-    @Test(description = "Authenticate as admin.", dependsOnMethods = "authAsAdminTest")
+    @Test(dependsOnMethods = {"authAsAdminTest"})
+    @Description("Authenticate as admin.")
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Authentication feature.")
     public void authAsCustomerTest() {
