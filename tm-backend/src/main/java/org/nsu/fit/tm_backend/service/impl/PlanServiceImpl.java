@@ -1,6 +1,7 @@
 package org.nsu.fit.tm_backend.service.impl;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jvnet.hk2.annotations.Service;
 import org.nsu.fit.tm_backend.repository.CustomerRepository;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import org.nsu.fit.tm_backend.service.PlanService;
 
 @Service
+@Singleton
 public class PlanServiceImpl implements PlanService {
     @Inject
     private CustomerRepository customerRepository;

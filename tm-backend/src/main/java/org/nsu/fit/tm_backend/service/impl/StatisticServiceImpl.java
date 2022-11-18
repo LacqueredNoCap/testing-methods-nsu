@@ -1,6 +1,7 @@
 package org.nsu.fit.tm_backend.service.impl;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jvnet.hk2.annotations.Service;
 
@@ -14,6 +15,7 @@ import org.nsu.fit.tm_backend.service.data.StatisticBO;
 import org.nsu.fit.tm_backend.service.data.StatisticPerCustomerBO;
 
 @Service
+@Singleton
 public class StatisticServiceImpl implements StatisticService {
 
     private final CustomerService customerService;

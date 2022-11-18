@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import lombok.extern.slf4j.Slf4j;
 import org.jvnet.hk2.annotations.Service;
 import org.nsu.fit.tm_backend.exception.AuthenticationException;
@@ -25,6 +27,7 @@ import org.nsu.fit.tm_backend.shared.Globals;
  */
 @Service
 @Slf4j
+@Singleton
 public class AuthenticationTokenServiceImpl implements AuthenticationTokenService {
 
     private final CustomerRepository customerRepository;
