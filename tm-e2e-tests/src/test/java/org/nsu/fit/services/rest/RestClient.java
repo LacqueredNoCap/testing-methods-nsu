@@ -23,8 +23,8 @@ import org.nsu.fit.services.rest.data.CustomerPojo;
 import org.nsu.fit.shared.JsonMapper;
 
 public class RestClient {
-    // Note: change url if you want to use the docker compose.
     //private static final String REST_URI = "http://localhost:8080/tm-backend/rest";
+    // Note: uncomment below line if you want to use the docker compose.
     private static final String REST_URI = "http://localhost:8089/tm-backend/rest";
 
     private static final Client CLIENT =
@@ -38,7 +38,7 @@ public class RestClient {
         CredentialsPojo credentialsPojo = new CredentialsPojo(login, pass);
 
         return post(
-                "authenticate",
+                "/authenticate",
                 JsonMapper.toJson(credentialsPojo, true),
                 AccountTokenPojo.class,
                 null
@@ -60,7 +60,7 @@ public class RestClient {
         );
 
         return post(
-                "customers",
+                "/customers",
                 JsonMapper.toJson(contactPojo, true),
                 CustomerPojo.class,
                 accountToken
@@ -86,18 +86,12 @@ public class RestClient {
         String httpResponse;
         R response = null;
         try {
-            httpResponse = request.post(
-                    Entity.entity(
-                            body,
-                            MediaType.APPLICATION_JSON
-                    ),
-                    String.class
-            );
+            httpResponse = request.post(Entity.json(body), String.class);
             Logger.debug("Response: " + httpResponse);
 
             response = JsonMapper.fromJson(httpResponse, responseType);
         } catch (ProcessingException | WebApplicationException e) {
-            Logger.error("Ошибка при вызове POST метода в ответ за запрос", e);
+            Logger.error("Ошибка при вызове POST метода", e);
         } catch (RuntimeException e) {
             Logger.error("Ошибка при парсинге ответа из Json", e);
         }

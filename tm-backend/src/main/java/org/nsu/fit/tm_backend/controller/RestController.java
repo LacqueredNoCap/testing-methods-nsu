@@ -39,7 +39,7 @@ import org.nsu.fit.tm_backend.service.impl.auth.data.AuthenticatedUserDetails;
 import org.nsu.fit.tm_backend.shared.Authority;
 import org.nsu.fit.tm_backend.shared.JsonMapper;
 
-@Path("")
+@Path("/tm-backend/rest")
 @Slf4j
 public class RestController {
     @Inject

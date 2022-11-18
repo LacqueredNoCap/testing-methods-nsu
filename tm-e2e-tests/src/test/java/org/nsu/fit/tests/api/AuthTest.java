@@ -5,6 +5,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import org.nsu.fit.services.rest.RestClient;
@@ -21,6 +22,7 @@ public class AuthTest {
     @Feature("Authentication feature.")
     public void authAsAdminTest() {
         adminToken = new RestClient().authenticate("admin", "setup");
+        Assert.assertNotNull(adminToken);
     }
 
     @Test(dependsOnMethods = {"authAsAdminTest"})

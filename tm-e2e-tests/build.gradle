@@ -58,6 +58,13 @@ dependencies {
     compile group:'org.seleniumhq.selenium', name: 'selenium-support', version: '3.11.0'
     compile group:'org.seleniumhq.selenium', name: 'selenium-java', version: '3.11.0'
 
+    compile "javax.xml.bind:jaxb-api:2.3.0"
+    compile "javax.activation:activation:1.1"
+    compile "com.sun.xml.bind:jaxb-impl:2.3.0"
+    compile "com.sun.xml.bind:jaxb-core:2.3.0"
+    compile "com.sun.xml.ws:rt:2.3.0"
+    compile "com.sun.xml.ws:jaxws-rt:2.3.0"
+
     implementation 'net.moznion:random-string:1.1.0'
 
 }
@@ -71,7 +78,7 @@ test {
         dependsOn cleanTest
         useDefaultListeners = true
 
-        suites ""
+        // suites ""
 
         if (api_suite) {
             suites "./src/test/resources/testng-xml/api_suite.xml"
