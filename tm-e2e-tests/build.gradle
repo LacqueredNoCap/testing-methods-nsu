@@ -1,3 +1,5 @@
+// gradle :tm-e2e-tests:clean :tm-e2e-tests:test -Papi :tm-e2e-tests:allureReport :tm-e2e-tests:allureServe
+
 buildscript {
     repositories {
         repositories {
@@ -9,7 +11,7 @@ buildscript {
     }
 }
 
-def allureVersion = "2.13.6"
+def allureVersion = "2.20.1"
 def testngVersion = "6.14.3"
 
 description = "E2E tests for Test Methods Application"
