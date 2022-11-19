@@ -21,13 +21,17 @@ public class JsonMapper {
 
     public static String toJson(Object pojo, boolean prettyPrint) {
         try {
-            StringWriter sw = new StringWriter();
-            JsonGenerator jg = jf.createGenerator(sw);
+//            StringWriter sw = new StringWriter();
+//            JsonGenerator jg = jf.createGenerator(sw);
+//            if (prettyPrint) {
+//                jg.useDefaultPrettyPrinter();
+//            }
+//            m.writeValue(jg, pojo);
+//            return sw.toString();
             if (prettyPrint) {
-                jg.useDefaultPrettyPrinter();
+                return m.writerWithDefaultPrettyPrinter().writeValueAsString(pojo);
             }
-            m.writeValue(jg, pojo);
-            return sw.toString();
+            return m.writeValueAsString(pojo);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

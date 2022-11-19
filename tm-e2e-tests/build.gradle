@@ -68,7 +68,7 @@ test {
         dependsOn cleanTest
         useDefaultListeners = true
 
-        suites ""
+        // suites ""
 
         if (api_suite) {
             suites "./src/test/resources/testng-xml/api_suite.xml"

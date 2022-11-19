@@ -18,10 +18,10 @@ import javax.ws.rs.core.MediaType;
 
 public class RestClient {
     // Note: change url if you want to use the docker compose.
-    private static final String REST_URI = "http://localhost:8080/tm-backend/rest";
-    //private static final String REST_URI = "http://localhost:8089/tm-backend/rest";
+    //private static final String REST_URI = "http://localhost:8080/tm-backend/rest";
+    private static final String REST_URI = "http://localhost:8089/tm-backend/rest";
 
-    private final static Client client = ClientBuilder.newClient(new ClientConfig().register(RestClientLogFilter.class));
+    private final static Client CLIENT = ClientBuilder.newClient(new ClientConfig().register(RestClientLogFilter.class));
 
     public AccountTokenPojo authenticate(String login, String pass) {
         CredentialsPojo credentialsPojo = new CredentialsPojo();
@@ -45,10 +45,13 @@ public class RestClient {
         return post("customers", JsonMapper.toJson(contactPojo, true), CustomerPojo.class, accountToken);
     }
 
-    private static <R> R post(String path, String body, Class<R> responseType, AccountTokenPojo accountToken) {
+    private static <R> R post(String path,
+                              String body,
+                              Class<R> responseType,
+                              AccountTokenPojo accountToken) {
         // Лабораторная 3: Добавить обработку Responses и Errors. Выводите их в лог.
         // Подумайте почему в filter нет Response чтобы можно было удобно его сохранить.
-        Invocation.Builder request = client
+        Invocation.Builder request = CLIENT
                 .target(REST_URI)
                 .path(path)
                 .request(MediaType.APPLICATION_JSON)

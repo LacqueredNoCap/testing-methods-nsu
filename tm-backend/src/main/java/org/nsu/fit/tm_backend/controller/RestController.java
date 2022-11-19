@@ -135,7 +135,7 @@ public class RestController {
             CustomerPojo customer = customerService.createCustomer(customerData);
 
             // send the answer
-            return Response.ok().entity(JsonMapper.toJson(customer, true)).build();
+            return Response.ok(JsonMapper.toJson(customer, true), MediaType.APPLICATION_JSON_TYPE).build();
         } catch (IllegalArgumentException ex) {
             log.error(ex.getMessage(), ex);
             return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage() + "\n" + ExceptionUtils.getFullStackTrace(ex)).build();
