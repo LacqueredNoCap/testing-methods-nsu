@@ -87,7 +87,8 @@ public class RestController {
     @RolesAllowed({ Authority.ADMIN_ROLE, Authority.CUSTOMER_ROLE })
     public Response me(@Context SecurityContext securityContext) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails =
+                    (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             ContactPojo contactPojo = customerService.me(authenticatedUserDetails);
 

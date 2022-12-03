@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 public class JsonMapper {
-    private static final ObjectMapper m = new ObjectMapper();
-    private static final JsonFactory jf = new JsonFactory();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
     public static <T> T fromJson(String jsonAsString, Class<T> pojoClass) {
         try {
-            return m.readValue(jsonAsString, pojoClass);
+            return MAPPER.readValue(jsonAsString, pojoClass);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -22,11 +22,11 @@ public class JsonMapper {
     public static String toJson(Object pojo, boolean prettyPrint) {
         try {
             StringWriter sw = new StringWriter();
-            JsonGenerator jg = jf.createGenerator(sw);
+            JsonGenerator jg = JSON_FACTORY.createGenerator(sw);
             if (prettyPrint) {
                 jg.useDefaultPrettyPrinter();
             }
-            m.writeValue(jg, pojo);
+            MAPPER.writeValue(jg, pojo);
             return sw.toString();
         } catch (IOException ex) {
             throw new RuntimeException(ex);

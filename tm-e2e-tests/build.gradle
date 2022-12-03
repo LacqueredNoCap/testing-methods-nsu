@@ -67,7 +67,7 @@ dependencies {
     compile "com.sun.xml.ws:rt:2.3.0"
     compile "com.sun.xml.ws:jaxws-rt:2.3.0"
 
-    implementation 'net.moznion:random-string:1.1.0'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
 
 }
 

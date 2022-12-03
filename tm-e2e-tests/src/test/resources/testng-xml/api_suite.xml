@@ -2,7 +2,27 @@
 <suite verbose="1" name="API Tests" annotations="JDK" parallel="tests">
     <test name="AuthTest">
         <classes>
-            <class name="org.nsu.fit.tests.api.AuthTest" />
+            <class name="org.nsu.fit.tests.api.AuthTest"/>
+        </classes>
+    </test>
+    <test name="BalanceTest">
+        <classes>
+            <class name="org.nsu.fit.tests.api.BalanceTest"/>
+        </classes>
+    </test>
+    <test name="CustomerTest">
+        <classes>
+            <class name="org.nsu.fit.tests.api.CustomerTest"/>
+        </classes>
+    </test>
+    <test name="HealthCheckTest">
+        <classes>
+            <class name="org.nsu.fit.tests.api.HealthCheckTest"/>
+        </classes>
+    </test>
+    <test name="MeTest">
+        <classes>
+            <class name="org.nsu.fit.tests.api.MeTest"/>
         </classes>
     </test>
 </suite>
