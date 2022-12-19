@@ -165,7 +165,8 @@ public class RestController {
     @RolesAllowed(Authority.CUSTOMER_ROLE)
     public Response topUpBalance(@Context SecurityContext securityContext, TopUpBalanceRequest topUpBalanceRequest) {
         try {
-            AuthenticatedUserDetails authenticatedUserDetails = (AuthenticatedUserDetails)securityContext.getUserPrincipal();
+            AuthenticatedUserDetails authenticatedUserDetails =
+                    (AuthenticatedUserDetails) securityContext.getUserPrincipal();
 
             var customerId = UUID.fromString(authenticatedUserDetails.getUserId());
             customerService.topUpBalance(customerId, topUpBalanceRequest.getMoney());
@@ -173,7 +174,10 @@ public class RestController {
             // send the answer.
             return Response.ok().build();
         } catch (IllegalArgumentException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage() + "\n" + ExceptionUtils.getFullStackTrace(ex)).build();
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ex.getMessage() + "\n" + ExceptionUtils.getFullStackTrace(ex))
+                    .build();
         }
     }
 

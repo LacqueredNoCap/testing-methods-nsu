@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite verbose="1" name="API Tests" annotations="JDK" parallel="tests">
+<suite verbose="1" name="API Tests" annotations="JDK" parallel="tests" thread-count="10">
     <test name="AuthTest">
         <classes>
             <class name="org.nsu.fit.tests.api.AuthTest"/>

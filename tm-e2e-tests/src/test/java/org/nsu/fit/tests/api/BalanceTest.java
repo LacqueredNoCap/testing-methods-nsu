@@ -1,6 +1,7 @@
 package org.nsu.fit.tests.api;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
@@ -13,8 +14,7 @@ import org.testng.annotations.Test;
 import org.nsu.fit.services.rest.RestClient;
 import org.nsu.fit.services.rest.data.AccountTokenPojo;
 import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.nsu.fit.services.rest.data.TopUpBalancePojo;
-import org.nsu.fit.services.rest.data.TopUpBalanceResponse;
+import org.nsu.fit.services.rest.data.TopUpBalanceRequest;
 
 public class BalanceTest {
 
@@ -31,26 +31,32 @@ public class BalanceTest {
         customerToken = restClient.authenticate(customerPojo.login, customerPojo.pass);
     }
 
-    @Test(description = "Initial value of balance is null.")
+    @Test(description = "Check initial balance.")
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("Balance feature.")
+    @Feature("Balance feature")
     public void checkInitialBalance() {
         List<CustomerPojo> customers =
                 restClient.getCustomerByLogin(customerPojo.login, adminToken);
 
-        Assert.assertEquals(customers.get(0).balance, 0);
+        Assert.assertTrue(Objects.nonNull(customers) && !customers.isEmpty());
+
+        Assert.assertEquals(customers.get(0).balance, customerPojo.balance);
     }
 
-    @Test(description = "Update balance.")
+    @Test(dependsOnMethods = {"checkInitialBalance"}, description = "Update balance.")
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("Balance feature.")
+    @Feature("Balance feature")
     public void topUpBalance() {
-        int money = 10;
-        TopUpBalancePojo topUpBalancePojo = new TopUpBalancePojo();
-        topUpBalancePojo.customerId = customerPojo.id;
-        topUpBalancePojo.money = money;
-        TopUpBalanceResponse topUpBalanceResponse = restClient.toUpBalance(topUpBalancePojo, customerToken);
+        int money = 1000;
+        TopUpBalanceRequest topUpBalanceRequest = new TopUpBalanceRequest();
+        topUpBalanceRequest.money = money;
+
+        restClient.topUpBalance(topUpBalanceRequest, customerToken);
+
         List<CustomerPojo> customers = restClient.getCustomerByLogin(customerPojo.login, customerToken);
-        Assert.assertEquals(customers.get(0).balance, money);
+
+        Assert.assertTrue(Objects.nonNull(customers) && !customers.isEmpty());
+
+        Assert.assertEquals(customers.get(0).balance, customerPojo.balance + money);
     }
 }

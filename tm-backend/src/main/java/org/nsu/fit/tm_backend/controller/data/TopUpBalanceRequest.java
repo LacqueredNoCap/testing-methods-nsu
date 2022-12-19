@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TopUpBalanceRequest {
+
     @JsonProperty("money")
-    private Integer money;
+    private int money;
+
 }

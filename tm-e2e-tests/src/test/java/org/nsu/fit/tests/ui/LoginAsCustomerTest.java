@@ -4,23 +4,22 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-
+import org.nsu.fit.services.browser.Browser;
+import org.nsu.fit.services.browser.BrowserService;
 import org.nsu.fit.services.rest.data.ContactPojo;
+import org.nsu.fit.tests.ui.screen.LoginScreen;
 import org.nsu.fit.utils.TestUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import org.nsu.fit.services.browser.BrowserService;
-import org.nsu.fit.tests.ui.screen.LoginScreen;
+public class LoginAsCustomerTest {
 
-public class CreateCustomerTest {
-
-    private LoginScreen loginScreen;
+    private Browser browser;
 
     @BeforeClass
     public void beforeClass() {
-        loginScreen = new LoginScreen(BrowserService.openNewBrowser());
+        browser = BrowserService.openNewBrowser();
     }
 
     @Test
@@ -30,7 +29,7 @@ public class CreateCustomerTest {
     public void createCustomer() {
         ContactPojo customer = TestUtils.randomCustomer();
 
-        loginScreen
+        new LoginScreen(browser)
                 .loginAsAdmin()
                 .createCustomer()
                 .fillEmail(customer.login)
@@ -44,6 +43,8 @@ public class CreateCustomerTest {
 
     @AfterClass
     public void afterClass() {
-        loginScreen.close();
+        if (browser != null) {
+            browser.close();
+        }
     }
 }

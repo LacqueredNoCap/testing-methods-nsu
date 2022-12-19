@@ -36,9 +36,9 @@ public class Browser implements Closeable {
             // we use Windows platform for development only and not for AT launch.
             // For launch AT regression, we use Linux platform.
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
-                // Лабораторная 4: Указать путь до chromedriver на вашей системе.
+                // Лабораторная 4 (DONE): Указать путь до chromedriver на вашей системе.
                 // Для того чтобы подобрать нужный chromedriver, необходимо посмотреть версию браузера Chrome
-                // на системе, на которой будут запускаться тесты и скачать соотвествующий ей chromedriver с сайта:
+                // на системе, на которой будут запускаться тесты и скачать соответствующий ей chromedriver с сайта:
                 // https://chromedriver.chromium.org/downloads
                 System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver/chromedriver.exe");
                 chromeOptions.setHeadless(Boolean.parseBoolean(System.getProperty("headless")));
