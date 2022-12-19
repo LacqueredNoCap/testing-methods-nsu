@@ -1,6 +1,7 @@
 package org.nsu.fit.services.browser;
 
 import io.qameta.allure.Attachment;
+import org.nsu.fit.services.rest.data.CustomerPojo;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * Please read: https://github.com/SeleniumHQ/selenium/wiki/Grid2
  */
 public class Browser implements Closeable {
+
     private WebDriver webDriver;
 
     public Browser() {
@@ -38,7 +40,7 @@ public class Browser implements Closeable {
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
                 // Лабораторная 4 (DONE): Указать путь до chromedriver на вашей системе.
                 // Для того чтобы подобрать нужный chromedriver, необходимо посмотреть версию браузера Chrome
-                // на системе, на которой будут запускаться тесты и скачать соответствующий ей chromedriver с сайта:
+                // на системе, на которой будут запускаться тесты и скачать соотвествующий ей chromedriver с сайта:
                 // https://chromedriver.chromium.org/downloads
                 System.setProperty("webdriver.chrome.driver", "C:/Tools/chromedriver/chromedriver.exe");
                 chromeOptions.setHeadless(Boolean.parseBoolean(System.getProperty("headless")));
@@ -66,6 +68,42 @@ public class Browser implements Closeable {
     public Browser openPage(String url) {
         webDriver.get(url);
         return this;
+    }
+
+    public String currentPage() {
+        return webDriver.getCurrentUrl();
+    }
+
+    public String getText(By element) {
+        makeScreenshot();
+        return webDriver.findElement(element).getText();
+    }
+
+    public int getCustomerIndex(CustomerPojo customerPojo) {
+        String pathToTable;
+        pathToTable = "//*[@id=\"root\"]/div/div/div/div/div[1]/div[2]/div/div/div/table/tbody/";
+        while (true) {
+            List<WebElement> logins = webDriver.findElements(By.xpath(pathToTable + "tr/td[2]"));
+            List<WebElement> firstName = webDriver.findElements(By.xpath(pathToTable + "tr/td[3]"));
+            List<WebElement> lastName = webDriver.findElements(By.xpath(pathToTable + "tr/td[4]"));
+            WebElement button = webDriver.findElement(By.xpath("//*[@id=\"root\"]/div/div/div/div/div[1]/table/tfoot/tr/td/div/div[3]/span[4]/button"));
+            for (int i = 0; i < logins.size(); i++) {
+                if (customerPojo.login.equals(logins.get(i).getText())
+                        &&
+                        customerPojo.firstName.equals(firstName.get(i).getText())
+                        &&
+                        customerPojo.lastName.equals(lastName.get(i).getText())
+                ) {
+                    return i;
+                }
+            }
+            if (!button.isEnabled()) {
+                break;
+            } else {
+                button.click();
+            }
+        }
+        return -1;
     }
 
     public Browser waitForElement(By element) {

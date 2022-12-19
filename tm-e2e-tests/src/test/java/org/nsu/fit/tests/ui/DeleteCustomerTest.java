@@ -1,6 +1,5 @@
 package org.nsu.fit.tests.ui;
 
-import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -13,10 +12,11 @@ import org.testng.annotations.Test;
 import org.nsu.fit.services.browser.Browser;
 import org.nsu.fit.services.browser.BrowserService;
 import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.nsu.fit.utils.TestUtils;
+import org.nsu.fit.tests.ui.screen.AdminScreen;
 import org.nsu.fit.tests.ui.screen.LoginScreen;
+import org.nsu.fit.utils.TestUtils;
 
-public class CreateCustomerTest {
+public class DeleteCustomerTest {
 
     private LoginScreen loginScreen;
     private Browser browser;
@@ -27,14 +27,13 @@ public class CreateCustomerTest {
         loginScreen = new LoginScreen(browser);
     }
 
-    @Test
-    @Description("Create customer via UI.")
+    @Test(description = "Delete customer.")
     @Severity(SeverityLevel.BLOCKER)
-    @Feature("Create customer feature")
-    public void createCustomer() {
+    @Feature("Delete customer feature")
+    public void deleteCustomer() {
         CustomerPojo customer = TestUtils.randomCustomer();
 
-        loginScreen
+        AdminScreen adminScreen = loginScreen
                 .loginAsAdmin()
                 .createCustomer()
                 .fillEmail(customer.login)
@@ -43,21 +42,17 @@ public class CreateCustomerTest {
                 .fillLastName(customer.lastName)
                 .clickSubmit();
 
-        Assert.assertEquals(
-                browser.currentPage(),
-                "http://localhost:8090/tm-frontend/admin"
-        );
-
-        // Лабораторная 4 (DONE): Проверить что customer создан с ранее переданными полями.
-        // Решить проблему с генерацией случайных данных.
         int customerIndex = browser.getCustomerIndex(customer);
         Assert.assertTrue(customerIndex >= 0);
 
+        adminScreen.deleteCustomer(customerIndex);
+
+        customerIndex = browser.getCustomerIndex(customer);
+        Assert.assertEquals(customerIndex, -1);
     }
 
     @AfterClass
     public void afterClass() {
         loginScreen.close();
     }
-
 }

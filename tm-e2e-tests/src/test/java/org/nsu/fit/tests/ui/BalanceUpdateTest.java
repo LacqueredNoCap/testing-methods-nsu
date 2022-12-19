@@ -1,6 +1,5 @@
 package org.nsu.fit.tests.ui;
 
-import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -13,10 +12,10 @@ import org.testng.annotations.Test;
 import org.nsu.fit.services.browser.Browser;
 import org.nsu.fit.services.browser.BrowserService;
 import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.nsu.fit.utils.TestUtils;
 import org.nsu.fit.tests.ui.screen.LoginScreen;
+import org.nsu.fit.utils.TestUtils;
 
-public class CreateCustomerTest {
+public class BalanceUpdateTest {
 
     private LoginScreen loginScreen;
     private Browser browser;
@@ -27,11 +26,11 @@ public class CreateCustomerTest {
         loginScreen = new LoginScreen(browser);
     }
 
-    @Test
-    @Description("Create customer via UI.")
-    @Severity(SeverityLevel.BLOCKER)
-    @Feature("Create customer feature")
+    @Test(description = "Top up balance.")
+    @Severity(SeverityLevel.CRITICAL)
+    @Feature("Top up balance feature")
     public void createCustomer() {
+        int topUpBalance = 1234;
         CustomerPojo customer = TestUtils.randomCustomer();
 
         loginScreen
@@ -41,18 +40,20 @@ public class CreateCustomerTest {
                 .fillPassword(customer.pass)
                 .fillFirstName(customer.firstName)
                 .fillLastName(customer.lastName)
-                .clickSubmit();
+                .clickSubmit()
+                .logout();
 
-        Assert.assertEquals(
-                browser.currentPage(),
-                "http://localhost:8090/tm-frontend/admin"
-        );
+        loginScreen
+                .loginAsCustomer(customer.login, customer.pass)
+                .topUpBalance(topUpBalance)
+                .logout();
 
-        // Лабораторная 4 (DONE): Проверить что customer создан с ранее переданными полями.
-        // Решить проблему с генерацией случайных данных.
+        loginScreen.loginAsAdmin();
+
+        customer.balance += topUpBalance;
+
         int customerIndex = browser.getCustomerIndex(customer);
         Assert.assertTrue(customerIndex >= 0);
-
     }
 
     @AfterClass

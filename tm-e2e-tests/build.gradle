@@ -71,7 +71,7 @@ dependencies {
 
 }
 
-def api_suite = project.hasProperty("api")
+//def api_suite = project.hasProperty("api")
 def ui_suite = project.hasProperty("ui")
 
 test {
@@ -82,9 +82,9 @@ test {
 
         // suites ""
 
-        if (api_suite) {
-            suites "./src/test/resources/testng-xml/api_suite.xml"
-        }
+//        if (api_suite) {
+//            suites "./src/test/resources/testng-xml/api_suite.xml"
+//        }
 
         if (ui_suite) {
             suites "./src/test/resources/testng-xml/ui_suite.xml"

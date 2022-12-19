@@ -1,8 +1,13 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite verbose="1" name="UI Tests" annotations="JDK" parallel="tests">
+<suite verbose="1" name="UI Tests" annotations="JDK" parallel="tests" thread-count="10">
     <test name="AcceptanceTest">
         <classes>
             <class name="org.nsu.fit.tests.ui.CreateCustomerTest"/>
+            <class name="org.nsu.fit.tests.ui.CreateWrongCustomerTryTest"/>
+            <class name="org.nsu.fit.tests.ui.DeleteCustomerTest"/>
+            <class name="org.nsu.fit.tests.ui.CreateCustomerTest"/>
+            <class name="org.nsu.fit.tests.ui.LoginAsCustomerTest"/>
+            <class name="org.nsu.fit.tests.ui.BalanceUpdateTest"/>
         </classes>
     </test>
 </suite>

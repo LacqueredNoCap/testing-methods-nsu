@@ -1,9 +1,10 @@
 package org.nsu.fit.tests.ui;
 
-import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
+
+import org.openqa.selenium.By;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -13,10 +14,10 @@ import org.testng.annotations.Test;
 import org.nsu.fit.services.browser.Browser;
 import org.nsu.fit.services.browser.BrowserService;
 import org.nsu.fit.services.rest.data.CustomerPojo;
-import org.nsu.fit.utils.TestUtils;
 import org.nsu.fit.tests.ui.screen.LoginScreen;
+import org.nsu.fit.utils.TestUtils;
 
-public class CreateCustomerTest {
+public class CreateWrongCustomerTryTest {
 
     private LoginScreen loginScreen;
     private Browser browser;
@@ -27,31 +28,33 @@ public class CreateCustomerTest {
         loginScreen = new LoginScreen(browser);
     }
 
-    @Test
-    @Description("Create customer via UI.")
+    @Test(description = "Create wrong customer try")
     @Severity(SeverityLevel.BLOCKER)
     @Feature("Create customer feature")
     public void createCustomer() {
         CustomerPojo customer = TestUtils.randomCustomer();
 
-        loginScreen
-                .loginAsAdmin()
-                .createCustomer()
-                .fillEmail(customer.login)
-                .fillPassword(customer.pass)
-                .fillFirstName(customer.firstName)
-                .fillLastName(customer.lastName)
-                .clickSubmit();
+        Assert.assertThrows(Exception.class, () ->
+                loginScreen
+                        .loginAsAdmin()
+                        .createCustomer()
+                        .fillEmail(customer.login)
+                        .fillPassword("1")
+                        .fillFirstName(customer.firstName)
+                        .fillLastName(customer.lastName)
+                        .clickSubmit()
+        );
+
+        browser.waitForElement(By.xpath("//button[@type = 'button']"));
+        browser.click(By.xpath("//button[@type = 'button']"));
 
         Assert.assertEquals(
                 browser.currentPage(),
                 "http://localhost:8090/tm-frontend/admin"
         );
 
-        // Лабораторная 4 (DONE): Проверить что customer создан с ранее переданными полями.
-        // Решить проблему с генерацией случайных данных.
         int customerIndex = browser.getCustomerIndex(customer);
-        Assert.assertTrue(customerIndex >= 0);
+        Assert.assertEquals(customerIndex, -1);
 
     }
 
@@ -59,5 +62,4 @@ public class CreateCustomerTest {
     public void afterClass() {
         loginScreen.close();
     }
-
 }
